@@ -7,8 +7,6 @@ services:
       - CALENDAR_ID=${CALENDAR_ID}
       - CREDENTIALS_PATH=/app/credentials/service_account.json
       - ALLOWED_USER_IDS=${ALLOWED_USER_IDS}
-    volumes:
-      - ${CREDENTIALS_SOURCE}:/app/credentials/service_account.json:ro
     logging:
       driver: json-file
       options:

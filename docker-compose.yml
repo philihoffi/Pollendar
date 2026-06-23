@@ -1,0 +1,21 @@
+services:
+  discord-calendar-bot:
+    build: .
+    restart: unless-stopped
+    environment:
+      - DISCORD_TOKEN=${DISCORD_TOKEN}
+      - CALENDAR_ID=${CALENDAR_ID}
+      - CREDENTIALS_PATH=/app/credentials/service_account.json
+      - ALLOWED_USER_IDS=${ALLOWED_USER_IDS}
+    configs:
+      - source: service_account_config
+        target: /app/credentials/service_account.json
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+configs:
+  service_account_config:
+    external: true

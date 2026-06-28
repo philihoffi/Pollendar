@@ -15,6 +15,9 @@ from datetime import datetime, timedelta
 
 from dotenv import load_dotenv
 
+from src.calendar_client import GoogleCalendarClient
+from src.utils.helpers import TZ
+
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, PROJECT_ROOT)
 
@@ -37,10 +40,6 @@ if not os.path.isfile(CREDENTIALS_PATH):
     print(f'❌ Datei nicht gefunden: {CREDENTIALS_PATH}')
     print('   Lege die service_account.json im Ordner credentials/ ab.')
     sys.exit(1)
-
-from src.calendar_client import GoogleCalendarClient
-from src.utils.helpers import TZ
-
 
 def main():
     print('🔌 Teste Verbindung zu Google Calendar ...')
@@ -91,7 +90,7 @@ def main():
         if found_full:
             print(f'   ✅ Erfolg: Volle ID = {found_full}')
         else:
-            print(f'   ❌ Fehler: Event nicht gefunden.')
+            print('   ❌ Fehler: Event nicht gefunden.')
             sys.exit(1)
     except Exception as e:
         print(f'   ❌ Fehler: {e}')

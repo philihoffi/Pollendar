@@ -119,7 +119,9 @@ Lege die `service_account.json` an einem festen Pfad auf deinem NAS ab, z. B.:
 
 ### Kurz-ID
 
-Jedes Event erhält beim Anlegen eine 8-stellige Kurz-ID (erste 8 Zeichen der Google-Event-ID). Diese wird in `/event edit` und `/event del` verwendet.
+Jedes Event erhält beim Anlegen eine 8-stellige Kurz-ID (erste 8 Zeichen der Google-Event-ID). Diese wird in `/event edit` und `/event del` verwendet. 
+
+**Hinweis:** Die Suche nach Kurz-IDs ist standardmäßig auf Events von vor **7 Tagen** bis in **60 Tagen** begrenzt, um die Performance zu optimieren. Ganz alte oder sehr weit in der Zukunft liegende Events können darüber ggf. nicht gefunden werden.
 
 ## Zugriffsschutz
 

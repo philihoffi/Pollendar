@@ -61,6 +61,7 @@ class SummaryCog(commands.Cog):
 
     @daily_summary.before_loop
     async def before_daily_summary(self):
+        await self.bot.wait_until_ready()
         now = datetime.now(TZ)
         target = now.replace(hour=8, minute=0, second=0, microsecond=0)
         if now >= target:

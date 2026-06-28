@@ -1,132 +1,131 @@
-# Discord Calendar Bot
+# Pollendar - Discord Calendar Bot
 
-Ein Discord-Bot zur Kalenderverwaltung per Slash-Commands. Events werden via Google Calendar API synchronisiert und sind in Apple Kalender (CalDAV) sowie anderen Google-Kalender-Clients sichtbar.
+Pollendar is a Discord bot designed for calendar management using Slash Commands. It synchronizes events with the Google Calendar API, ensuring your schedule is accessible across various platforms like Apple Calendar (via CalDAV), Google Calendar clients, and other integrated services.
 
-## Architektur
+## 🚀 Features
 
+- **Slash Commands**: Intuitive commands for adding, listing, editing, and deleting events.
+- **Google Calendar Sync**: Real-time synchronization with Google Calendar.
+- **Short-ID System**: Uses 8-character IDs for easy event identification within Discord.
+- **Access Control**: Optional whitelist to restrict bot usage to specific users.
+- **Dockerized**: Easy deployment using Docker and Docker Compose.
+- **Localized**: Default support for German date/time formats and Berlin timezone.
+
+## 🏗️ Architecture
+
+```text
+Discord (Slash Commands) → Python Bot (Docker) → Google Calendar API → Other Clients (CalDAV Sync)
 ```
-Discord (Slash Commands) → Python Bot (Docker) → Google Calendar API → Apple Kalender (CalDAV-Sync)
-```
 
-Der Bot stellt nur ausgehende HTTPS-Verbindungen her. Es wird kein eingehender Port oder Webserver benötigt.
+The bot only establishes outgoing HTTPS connections. No incoming ports or web servers are required.
 
-## Projektstruktur
+## 📁 Project Structure
 
-```
+```text
 .
-├── src/                          # Quellcode (Python-Paket)
-│   ├── __main__.py               # Einstiegspunkt (python -m src)
-│   ├── bot.py                    # Bot-Initialisierung, Config, main()
-│   ├── calendar_client.py        # Google Calendar API Wrapper
+├── src/                          # Source code
+│   ├── __main__.py               # Entry point (python -m src)
+│   ├── bot.py                    # Bot initialization and configuration
+│   ├── calendar_client.py        # Google Calendar API wrapper
 │   ├── cogs/
-│   │   └── event_commands.py     # /event add/list/edit/del
+│   │   └── event_commands.py     # Discord slash commands (/event)
 │   └── utils/
-│       └── helpers.py            # Zugriffsschutz, Datum/Zeit
-├── .env.example
-├── docker-compose.yml
-├── Dockerfile
-├── requirements.txt
-└── test_calendar_connection.py
+│       └── helpers.py            # Validation, access control, and formatting
+├── .env.example                  # Environment variables template
+├── docker-compose.yml            # Docker deployment configuration
+├── Dockerfile                    # Container build instructions
+├── requirements.txt              # Python dependencies
+└── test_calendar_connection.py   # Connection test script
 ```
 
-## Voraussetzungen
+## 🛠️ Prerequisites
 
-- Docker + Docker Compose (auf dem Raspberry Pi / NAS)
-- Discord Developer Portal – eine Application mit Bot
-- Google Cloud Platform – ein Projekt mit aktivierter Calendar API und Service Account
+- **Docker & Docker Compose** (running on a Raspberry Pi, NAS, or Server).
+- **Discord Developer Portal**: An application with a Bot token.
+- **Google Cloud Platform**: A project with the **Google Calendar API** enabled and a **Service Account**.
 
-## Setup
+## ⚙️ Setup Instructions
 
-### 1. Discord Developer Portal
+### 1. Discord Bot Configuration
 
-1. Gehe zu https://discord.com/developers/applications und erstelle eine **New Application**.
-2. Gehe zu **Bot** → **Add Bot**.
-3. Kopiere den **Token** unter dem Bot-Namen.
-4. Deaktiviere unter **Bot** die Option **Public Bot** (nur du kannst den Bot einladen).
-5. Gehe zu **OAuth2** → **URL Generator**:
-   - Scopes: `bot` + `applications.commands`
-   - Berechtigungen: `Send Messages` + `Use Slash Commands`
-6. Öffne die generierte URL in einem Browser, um den Bot auf deinen Server einzuladen.
+1. Go to the [Discord Developer Portal](https://discord.com/developers/applications) and create a **New Application**.
+2. Navigate to **Bot** → **Add Bot**.
+3. Copy the **Token**.
+4. Disable the **Public Bot** option (so only you can invite it).
+5. Go to **OAuth2** → **URL Generator**:
+   - Select Scopes: `bot` + `applications.commands`.
+   - Select Permissions: `Send Messages` + `Use Slash Commands`.
+6. Open the generated URL in your browser to invite the bot to your server.
 
 ### 2. Google Cloud Setup
 
-1. Gehe zu https://console.cloud.google.com/ und erstelle ein neues Projekt.
-2. Navigiere zu **APIs & Dienste** → **Bibliothek** und aktiviere die **Google Calendar API**.
-3. Gehe zu **APIs & Dienste** → **Anmeldedaten** → **Anmeldedaten erstellen** → **Dienstkonto**.
-4. Gib einen Namen ein und klicke auf **Erstellen und fortfahren**.
-5. Nach der Erstellung klicke auf das Dienstkonto, gehe zu **Schlüssel** → **Schlüssel hinzufügen** → **Neuen Schlüssel erstellen** → **JSON**.
-6. Lade die JSON-Datei herunter – diese wird gleich in Portainer als Config benötigt.
+1. Go to the [Google Cloud Console](https://console.cloud.google.com/) and create a new project.
+2. Navigate to **APIs & Services** → **Library** and enable the **Google Calendar API**.
+3. Go to **APIs & Services** → **Credentials** → **Create Credentials** → **Service Account**.
+4. Provide a name and click **Create and Continue**.
+5. After creation, click on the service account, go to **Keys** → **Add Key** → **Create New Key** → **JSON**.
+6. Download the JSON file; you will need this for the deployment.
 
-### 3. Google Kalender freigeben
+### 3. Calendar Permissions
 
-1. Öffne https://calendar.google.com/.
-2. Finde (oder erstelle) den Kalender, den der Bot verwenden soll.
-3. Gehe zu Kalendereinstellungen → **Für bestimmte Personen freigeben**.
-4. Füge die **E-Mail-Adresse des Service Account** (aus der JSON-Datei, z. B. `name@project.iam.gserviceaccount.com`) hinzu.
-5. Wähle die Berechtigung **Ereignisse bearbeiten**.
-6. Kopiere die Kalender-ID aus den Kalendereinstellungen unter **Kalender-ID**.
+1. Open [Google Calendar](https://calendar.google.com/).
+2. Find (or create) the calendar you want the bot to manage.
+3. Go to **Settings and sharing** → **Share with specific people or groups**.
+4. Add the **Service Account Email** (found in your JSON file, e.g., `name@project.iam.gserviceaccount.com`).
+5. Set permissions to **Make changes to events**.
+6. Under **Integrate calendar**, copy the **Calendar ID**.
 
-## Portainer Deployment
+## 🚢 Deployment
 
-### 4. Service-Account-JSON aufs NAS legen
+### 4. Prepare Service Account Key
 
-Lege die `service_account.json` an einem festen Pfad auf deinem NAS ab, z. B.:
-```
+Place the `service_account.json` at a permanent location on your host system, for example:
+```bash
 /volume1/docker/pollendar/service_account.json
 ```
 
-### 5. Stack anlegen
+### 5. Docker Compose Configuration
 
-1. Portainer → **Stacks** → **Add stack**
-2. Name: `pollendar`
-3. **Build method**: Repository
-4. Repository URL: `https://github.com/philihoffi/Pollendar-`
-5. **Compose path**: `docker-compose.yml`
-6. **Environment variables** (ausfüllen):
+Use the following environment variables in your `docker-compose.yml` or `.env` file:
 
-| Variable | Wert |
+| Variable | Description |
 |---|---|
-| `DISCORD_TOKEN` | Dein Discord Bot-Token |
-| `CALENDAR_ID` | Deine Google Calendar-ID |
-| `CREDENTIALS_SOURCE` | Pfad zur `service_account.json` auf dem NAS, z. B. `/volume1/docker/pollendar/service_account.json` |
-| `ALLOWED_USER_IDS` | Discord-IDs (optional, leer = alle erlaubt) |
+| `DISCORD_TOKEN` | Your Discord Bot Token |
+| `CALENDAR_ID` | Your Google Calendar ID |
+| `CREDENTIALS_SOURCE` | Path to `service_account.json` on the **Host** system |
+| `ALLOWED_USER_IDS` | Comma-separated Discord User IDs (optional, empty = all allowed) |
 
-7. **Deploy the stack**
+### 6. Portainer Stack (Optional)
 
-### 6. Auto-Update (Webhook)
+1. Create a new Stack in Portainer.
+2. Point it to this repository: `https://github.com/philihoffi/Pollendar-`.
+3. Fill in the **Environment variables** as listed above.
+4. **Deploy the stack**.
 
-1. Portainer → Stack `pollendar` → **Webhook** → kopiere die Webhook-URL
-2. GitHub → Repo → Settings → Webhooks → **Add webhook**
-3. Payload URL: Portainer-Webhook-URL einfügen
-4. Events: `Just the push event`
-5. **Add webhook**
+## ⌨️ Command Reference
 
-## Command-Referenz
-
-| Command | Parameter | Beschreibung |
+| Command | Parameters | Description |
 |---|---|---|
-| `/hallo` | – | Test – Bot antwortet |
-| `/event add` | `titel`, `datum` (TT.MM.JJJJ), `startzeit` (HH:MM), `endzeit` (opt.) | Neues Event anlegen |
-| `/event list` | `bereich: heute / woche / monat` | Events auflisten |
-| `/event edit` | `event_id`, `titel`/`datum`/`startzeit`/`endzeit` (opt.) | Event bearbeiten |
-| `/event del` | `event_id` | Event löschen |
+| `/hallo` | - | Test command - Bot responds with a greeting |
+| `/event add` | `title`, `date`, `start`, `end` (opt.) | Create a new event via modal |
+| `/event list` | `range: today / week / month` | List upcoming events |
+| `/event edit` | `event_id`, various fields (opt.) | Edit an existing event via modal |
+| `/event del` | `event_id` | Delete an event (requires confirmation) |
 
-### Datums- und Zeitformat
+### Formats & Identification
 
-- Datum: `TT.MM.JJJJ` (z. B. `24.12.2024`)
-- Zeit: `HH:MM` (z. B. `14:30`)
-- **Zeitzone**: `Europe/Berlin` (UTC+1 / UTC+2)
+- **Date**: `DD.MM.YYYY` (e.g., `24.12.2024`)
+- **Time**: `HH:MM` (e.g., `14:30`)
+- **Timezone**: Default is `Europe/Berlin`.
+- **Short-ID**: Every event is identified by an 8-character Short-ID (the first 8 characters of its Google ID). Use this ID for `/event edit` and `/event del`.
 
-### Kurz-ID
+> [!NOTE]
+> To optimize performance, the bot searches for Short-IDs within a window of **7 days in the past** to **60 days in the future**. Events outside this range might not be found via Short-ID.
 
-Jedes Event erhält beim Anlegen eine 8-stellige Kurz-ID (erste 8 Zeichen der Google-Event-ID). Diese wird in `/event edit` und `/event del` verwendet. 
+## 🔒 Security
 
-**Hinweis:** Die Suche nach Kurz-IDs ist standardmäßig auf Events von vor **7 Tagen** bis in **60 Tagen** begrenzt, um die Performance zu optimieren. Ganz alte oder sehr weit in der Zukunft liegende Events können darüber ggf. nicht gefunden werden.
+If `ALLOWED_USER_IDS` is set, only specified users can interact with the bot. If left empty, anyone on the server can use the commands.
 
-## Zugriffsschutz
+## 📄 License
 
-Ist `ALLOWED_USER_IDS` gesetzt, dürfen nur diese User den Bot verwenden. Ist die Liste leer, ist der Bot für alle auf dem Server geöffnet.
-
-## Lizenz
-
-MIT
+This project is licensed under the MIT License.

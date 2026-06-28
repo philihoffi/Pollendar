@@ -81,7 +81,7 @@ class EventCreateModal(Modal):
             full_id = calendar.add_event(titel, start_dt, end_dt)
             short_id = full_id[:8]
         except Exception:
-            logger.exception("Fehler beim Erstellen des Events")
+            logger.exception("Error creating event")
             await interaction.followup.send('❌ Fehler beim Erstellen des Events in Google Calendar.', ephemeral=True)
             return
 
@@ -156,7 +156,7 @@ class EventEditModal(Modal):
         try:
             calendar.update_event(self.event_id, title=titel, start_dt=new_start, end_dt=new_end)
         except Exception:
-            logger.exception("Fehler beim Aktualisieren des Events")
+            logger.exception("Error updating event")
             await interaction.followup.send('❌ Fehler beim Aktualisieren des Events.', ephemeral=True)
             return
 
@@ -205,7 +205,7 @@ class EventDeleteModal(Modal):
             await interaction.followup.send(f'❌ {e}', ephemeral=True)
             return
         except Exception:
-            logger.exception("Fehler beim Löschen des Events")
+            logger.exception("Error deleting event")
             await interaction.followup.send('❌ Fehler beim Löschen des Events.', ephemeral=True)
             return
 
@@ -253,7 +253,7 @@ class EventCog(commands.Cog):
                 return
             current = calendar.get_event(full_id)
         except Exception:
-            logger.exception("Fehler beim Abrufen des Events")
+            logger.exception("Error fetching event")
             await interaction.response.send_message('❌ Fehler beim Abrufen des Events.', ephemeral=True)
             return
         current_title = current.get('summary', '')
@@ -278,7 +278,7 @@ class EventCog(commands.Cog):
                 return
             current = calendar.get_event(full_id)
         except Exception:
-            logger.exception("Fehler beim Abrufen des Events")
+            logger.exception("Error fetching event")
             await interaction.response.send_message('❌ Fehler beim Abrufen des Events.', ephemeral=True)
             return
         current_title = current.get('summary', '(kein Titel)')
@@ -307,7 +307,7 @@ class EventCog(commands.Cog):
         try:
             events = calendar.list_events(start_date, end_date)
         except Exception:
-            logger.exception("Fehler beim Abrufen der Events")
+            logger.exception("Error fetching events from calendar")
             await interaction.followup.send('❌ Fehler beim Abrufen der Events aus Google Calendar.', ephemeral=True)
             return
         if not events:

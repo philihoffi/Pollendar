@@ -36,18 +36,18 @@ bot = commands.Bot(command_prefix='/', intents=intents)
 
 @bot.event
 async def on_ready():
-    logger.info(f'Bot angemeldet als {bot.user}')
+    logger.info(f'Bot logged in as {bot.user}')
     try:
         synced = await bot.tree.sync()
-        logger.info(f'{len(synced)} Slash-Command(s) synchronisiert')
+        logger.info(f'{len(synced)} slash command(s) synchronized')
     except Exception as e:
-        logger.error(f'Fehler beim Synchronisieren der Commands: {e}')
+        logger.error(f'Error syncing commands: {e}')
 
 
 async def main():
     allowed_ids = parse_allowed_users(ALLOWED_USER_IDS_STR)
     set_allowed_users(allowed_ids)
-    logger.info(f"Whitelist: {len(allowed_ids)} User(s)" if allowed_ids else "Whitelist: alle erlaubt")
+    logger.info(f"Whitelist: {len(allowed_ids)} user(s)" if allowed_ids else "Whitelist: everyone allowed")
 
     bot.calendar_client = GoogleCalendarClient(CALENDAR_ID, CREDENTIALS_PATH)
 

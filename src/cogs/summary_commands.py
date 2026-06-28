@@ -33,19 +33,20 @@ class SummaryCog(commands.Cog):
         current_id = get_summary_channel_id()
 
         if channel is None:
-            if current_id:
-                ch = self.bot.get_channel(current_id)
-                name = ch.mention if ch else f"Unbekannt ({current_id})"
-                await interaction.response.send_message(
-                    f"📋 Aktuell: {name}\n"
-                    f"`/config summary #channel` zum Ändern, `/config summary` ohne Channel zum Deaktivieren.",
-                    ephemeral=True,
-                )
-            else:
+            if current_id is None:
                 await interaction.response.send_message(
                     "📋 Kein Channel eingestellt. `/config summary #channel` zum Festlegen.",
                     ephemeral=True,
                 )
+                return
+
+            ch = self.bot.get_channel(current_id)
+            name = ch.mention if ch else f"Unbekannt ({current_id})"
+            set_summary_channel_id(None)
+            await interaction.response.send_message(
+                f"🛑 Tägliche Zusammenfassung deaktiviert (war: {name}).",
+                ephemeral=True,
+            )
             return
 
         set_summary_channel_id(channel.id)

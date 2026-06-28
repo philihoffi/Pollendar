@@ -32,7 +32,10 @@ def get_summary_channel_id() -> int | None:
     return load_config().get("summary_channel_id")
 
 
-def set_summary_channel_id(channel_id: int):
+def set_summary_channel_id(channel_id: int | None):
     config = load_config()
-    config["summary_channel_id"] = channel_id
+    if channel_id is None:
+        config.pop("summary_channel_id", None)
+    else:
+        config["summary_channel_id"] = channel_id
     save_config(config)

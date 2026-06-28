@@ -95,7 +95,6 @@ class SummaryCog(commands.Cog):
             return
 
         if not events:
-            await channel.send("🌅 **Guten Morgen!** Heute stehen keine Termine an – entspannter Tag!")
             return
 
         embed = discord.Embed(

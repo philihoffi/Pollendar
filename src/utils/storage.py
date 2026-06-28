@@ -17,8 +17,11 @@ def load_config() -> dict:
     if not CONFIG_FILE.exists():
         return {}
     try:
-        return json.loads(CONFIG_FILE.read_text())
-    except (json.JSONDecodeError, OSError) as e:
+        data = json.loads(CONFIG_FILE.read_text(encoding="utf-8"))
+        if not isinstance(data, dict):
+            raise ValueError("config root must be a JSON object")
+        return data
+    except (json.JSONDecodeError, OSError, ValueError) as e:
         logger.error("Failed to load config: %s", e)
         return {}
 

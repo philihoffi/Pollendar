@@ -137,7 +137,7 @@ class PollCog(commands.Cog):
         self.bot = bot
         self.check_ended_polls.start()
 
-    event_poll = app_commands.Group(name="event", description="Termin-Umfragen verwalten")
+    event_poll = app_commands.Group(name="event-poll", description="Termin-Umfragen verwalten")
 
     @event_poll.command(name="create", description="Neue Termin-Umfrage erstellen")
     async def poll_create(self, interaction: discord.Interaction):

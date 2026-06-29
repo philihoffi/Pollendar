@@ -1,5 +1,4 @@
 import pytest
-import pytz
 
 from src.utils.storage import (
     add_poll_entry,
@@ -8,8 +7,6 @@ from src.utils.storage import (
     mark_poll_finalized,
     save_polls,
 )
-
-TZ = pytz.timezone("Europe/Berlin")
 
 
 @pytest.fixture(autouse=True)

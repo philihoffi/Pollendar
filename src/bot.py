@@ -54,4 +54,5 @@ async def main():
     async with bot:
         await bot.load_extension('src.cogs.event_commands')
         await bot.load_extension('src.cogs.summary_commands')
+        await bot.load_extension('src.cogs.poll_commands')
         await bot.start(DISCORD_TOKEN)

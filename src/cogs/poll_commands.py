@@ -80,7 +80,7 @@ class EventPollModal(Modal):
                 date_str, time_str = opt.split(maxsplit=1)
                 d = parse_date(date_str)
                 t = parse_time(time_str)
-                dt = TZ.localize(datetime.combine(d, t))
+                dt = datetime.combine(d, t, tzinfo=TZ)
                 if dt <= datetime.now(TZ):
                     await interaction.response.send_message(
                         f'❌ "{opt}" liegt in der Vergangenheit.', ephemeral=True
@@ -322,7 +322,7 @@ class PollCog(commands.Cog):
             date_str, time_str = winner_text.split(maxsplit=1)
             event_date = parse_date(date_str)
             event_time = parse_time(time_str)
-            start_dt = TZ.localize(datetime.combine(event_date, event_time))
+            start_dt = datetime.combine(event_date, event_time, tzinfo=TZ)
         except ValueError:
             logger.exception("Konnte Gewinner nicht parsen: %s", winner_text)
             await channel.send(f'❌ Konnte Gewinner "{winner_text}" nicht als Datum parsen.')

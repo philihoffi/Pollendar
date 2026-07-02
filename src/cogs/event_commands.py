@@ -68,11 +68,11 @@ class EventCreateModal(Modal):
         try:
             event_date = parse_date(datum)
             start_time = parse_time(startzeit)
-            start_dt = TZ.localize(datetime.combine(event_date, start_time))
+            start_dt = datetime.combine(event_date, start_time, tzinfo=TZ)
 
             if endzeit:
                 end_time = parse_time(endzeit)
-                end_dt = TZ.localize(datetime.combine(event_date, end_time))
+                end_dt = datetime.combine(event_date, end_time, tzinfo=TZ)
                 if end_dt <= start_dt:
                     end_dt = start_dt + timedelta(hours=1)
             else:
@@ -144,11 +144,11 @@ class EventEditModal(Modal):
         try:
             event_date = parse_date(datum)
             start_time = parse_time(startzeit)
-            new_start = TZ.localize(datetime.combine(event_date, start_time))
+            new_start = datetime.combine(event_date, start_time, tzinfo=TZ)
 
             if endzeit:
                 end_time = parse_time(endzeit)
-                new_end = TZ.localize(datetime.combine(event_date, end_time))
+                new_end = datetime.combine(event_date, end_time, tzinfo=TZ)
                 if new_end <= new_start:
                     new_end = new_start + timedelta(hours=1)
             else:

@@ -106,8 +106,8 @@ class GoogleCalendarClient:
             raise
 
     def list_events(self, start_date: date, end_date: date) -> list[dict]:
-        time_min = TZ.localize(datetime(start_date.year, start_date.month, start_date.day, 0, 0, 0))
-        time_max = TZ.localize(datetime(end_date.year, end_date.month, end_date.day, 23, 59, 59))
+        time_min = datetime(start_date.year, start_date.month, start_date.day, 0, 0, 0, tzinfo=TZ)
+        time_max = datetime(end_date.year, end_date.month, end_date.day, 23, 59, 59, tzinfo=TZ)
 
         try:
             page_token = None

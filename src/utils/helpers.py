@@ -2,11 +2,11 @@ import logging
 from datetime import date, datetime, time
 
 import discord
-import pytz
+from zoneinfo import ZoneInfo
 
 logger = logging.getLogger(__name__)
 
-TZ = pytz.timezone('Europe/Berlin')
+TZ = ZoneInfo('Europe/Berlin')
 
 ALLOWED_USER_IDS: set[int] = set()
 

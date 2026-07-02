@@ -1,8 +1,8 @@
 import logging
 from datetime import date, datetime, time
+from zoneinfo import ZoneInfo
 
 import discord
-from zoneinfo import ZoneInfo
 
 logger = logging.getLogger(__name__)
 
